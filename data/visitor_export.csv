@@ -1,0 +1,6 @@
+visitor_id,first_name,last_name,phone_number,visit_purpose,department,entry_time,exit_time,is_student,university,id_card_number,,,
+1,Amine,Belaid,+213 550 100 100,Technical meeting,IT Systems,2026-05-02T09:39,2026-05-02T13:04,0,,ID-1001,,,Standard
+2,Nour,Kadi,+213 661 234 987,Internship interview,Human Resources,2026-05-01T10:39,2026-05-01T11:39,1,USTHB,ID-1002,,,Standard
+3,Samir,Mansouri,+213 770 808 111,Supplier delivery,General Affairs,2026-04-30T08:39,2026-04-30T09:39,0,,ID-1003,,,Standard
+4,Lina,Aribi,+213 555 909 202,Administrative request,Finance,2026-04-29T12:39,2026-05-02T13:04,1,University of Algiers,ID-1004,,,Standard
+5,younes,laouar,2.13658E+12,visit_purpose,Finance,,,,,,,,

@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}Dashboard | Visitor Management System{% endblock %}
+{% block heading %}Reception Dashboard{% endblock %}
+{% block content %}
+<section class="stats-grid">
+  <article class="stat accent-blue"><span>Total Records</span><strong>{{ stats.total }}</strong><small>Centralized visitor history</small></article>
+  <article class="stat accent-teal"><span>Currently Inside</span><strong>{{ stats.inside }}</strong><small>Live occupancy indicator</small></article>
+  <article class="stat accent-gold"><span>Student Visitors</span><strong>{{ stats.students }}</strong><small>Academic visitor category</small></article>
+  <article class="stat accent-red"><span>Today</span><strong>{{ stats.today }}</strong><small>Entries since midnight</small></article>
+</section>
+
+<section class="dashboard-feature">
+  <article class="panel command-center">
+    <span class="eyebrow">Command center</span>
+    <h2>Fast reception workflow</h2>
+    <p>Register visitors, issue badges, record exits, and review live security indicators from one place.</p>
+    <div class="quick-actions">
+      <a class="button primary" href="{{ url_for('register') }}">Register Visitor</a>
+      <a class="button ghost" href="{{ url_for('records', status='inside') }}">Inside List</a>
+      <a class="button ghost" href="{{ url_for('reports') }}">Analytics</a>
+    </div>
+  </article>
+  <article class="panel mini-map">
+    <span class="eyebrow">Access zones</span>
+    <div class="zone-grid">
+      <span>Reception</span>
+      <span>IT Systems</span>
+      <span>Finance</span>
+      <span>Security</span>
+      <span>Meeting Room</span>
+      <span>General Affairs</span>
+    </div>
+  </article>
+</section>
+
+<section class="panel">
+  <div class="panel-header">
+    <h2>Recent Visitors</h2>
+    <a class="button primary" href="{{ url_for('register') }}">New Visitor</a>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Department</th>
+          <th>Host</th>
+          <th>Badge</th>
+          <th>Purpose</th>
+          <th>Entry</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for visitor in recent_visitors %}
+        <tr>
+          <td>{{ visitor.first_name }} {{ visitor.last_name }}</td>
+          <td>{{ visitor.department }}</td>
+          <td>{{ visitor.host_name or "-" }}</td>
+          <td><a class="badge-link" href="{{ url_for('badge', visitor_id=visitor.visitor_id) }}">{{ visitor.badge_number or ("MOB-%03d" % visitor.visitor_id) }}</a></td>
+          <td>{{ visitor.visit_purpose }}</td>
+          <td>{{ visitor.entry_time.replace("T", " ") }}</td>
+          <td><span class="badge {{ 'inside' if not visitor.exit_time else 'exited' }}">{{ 'Inside' if not visitor.exit_time else 'Exited' }}</span></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

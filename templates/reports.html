@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+{% block title %}Reports | Visitor Management System{% endblock %}
+{% block heading %}Visitor Analytics{% endblock %}
+{% block content %}
+<section class="hero-report">
+  <div>
+    <span class="eyebrow">Live operational overview</span>
+    <h2>{{ stats.total }} total visitor records</h2>
+    <p>Reception activity, occupancy, department load, and traceability indicators generated directly from the SQLite visitor database.</p>
+  </div>
+  <div class="hero-meter" style="--value: {{ student_share }}%">
+    <strong>{{ student_share }}%</strong>
+    <span>student visitors</span>
+  </div>
+</section>
+
+<section class="stats-grid report-stats">
+  <article class="stat accent-blue"><span>Currently Inside</span><strong>{{ stats.inside }}</strong><small>Visitors without recorded exit</small></article>
+  <article class="stat accent-teal"><span>Today</span><strong>{{ stats.today }}</strong><small>Entries registered today</small></article>
+  <article class="stat accent-gold"><span>Average Visit</span><strong>{{ average_duration }}m</strong><small>Based on closed visits</small></article>
+  <article class="stat accent-red"><span>Peak Day</span><strong>{{ peak_day.count if peak_day else 0 }}</strong><small>{{ peak_day.day if peak_day else "No data yet" }}</small></article>
+</section>
+
+<section class="analytics-grid">
+  <article class="panel chart-panel wide">
+    <div class="panel-title">
+      <div>
+        <span class="eyebrow">Seven day trend</span>
+        <h2>Daily Visitor Volume</h2>
+      </div>
+      <strong>{{ max_daily }} max/day</strong>
+    </div>
+    <div class="column-chart">
+      {% for row in daily %}
+      <div class="column">
+        <div class="column-track"><i style="height: {{ (row.count / max_daily * 100) | round }}%"></i></div>
+        <strong>{{ row.count }}</strong>
+        <span>{{ row.day[5:] }}</span>
+      </div>
+      {% endfor %}
+    </div>
+  </article>
+
+  <article class="panel insight-panel">
+    <span class="eyebrow">Main insight</span>
+    <h2>{{ top_department.department if top_department else "No department" }}</h2>
+    <p>The highest visitor load is concentrated in this department, which helps reception prepare staff routing and access checks during busy periods.</p>
+    <div class="insight-number">
+      <strong>{{ top_department.count if top_department else 0 }}</strong>
+      <span>visits recorded</span>
+    </div>
+  </article>
+</section>
+
+<section class="report-grid">
+  <article class="panel chart-panel">
+    <div class="panel-title">
+      <div>
+        <span class="eyebrow">Workload</span>
+        <h2>Visits by Department</h2>
+      </div>
+    </div>
+    <div class="bars">
+      {% for row in departments %}
+      <div class="bar-row">
+        <span>{{ row.department }}</span>
+        <div><i style="width: {{ (row.count / max_department * 100) | round }}%"></i></div>
+        <strong>{{ row.count }}</strong>
+      </div>
+      {% endfor %}
+    </div>
+  </article>
+
+  <article class="panel">
+    <div class="panel-title">
+      <div>
+        <span class="eyebrow">Security desk</span>
+        <h2>Visitors Currently Inside</h2>
+      </div>
+      <span class="badge inside">{{ stats.inside }} active</span>
+    </div>
+    <div class="active-list">
+      {% for visitor in active_rows %}
+      <div>
+        <strong>{{ visitor.first_name }} {{ visitor.last_name }}</strong>
+        <span>{{ visitor.department }} · {{ visitor.host_name or "No host" }} · {{ visitor.badge_number or "No badge" }}</span>
+        <small>{{ visitor.access_level }} access · {{ visitor.entry_time.replace("T", " ") }}</small>
+      </div>
+      {% else %}
+      <p class="empty">No active visitors at the moment.</p>
+      {% endfor %}
+    </div>
+  </article>
+</section>
+
+<section class="report-grid">
+  <article class="panel timeline-panel">
+    <div class="panel-title">
+      <div>
+        <span class="eyebrow">Recent closures</span>
+        <h2>Exit Timeline</h2>
+      </div>
+    </div>
+    <div class="timeline">
+      {% for visitor in recent_exits %}
+      <div>
+        <i></i>
+        <strong>{{ visitor.first_name }} {{ visitor.last_name }}</strong>
+        <span>{{ visitor.department }} · {{ visitor.exit_time.replace("T", " ") }}</span>
+      </div>
+      {% else %}
+      <p class="empty">No exits recorded yet.</p>
+      {% endfor %}
+    </div>
+  </article>
+  <article class="panel security-panel">
+    <span class="eyebrow">Traceability</span>
+    <h2>Security Checklist</h2>
+    <ul class="checklist">
+      <li>Identity document captured for every record</li>
+      <li>Host employee assigned before entry</li>
+      <li>Badge number visible from records screen</li>
+      <li>Exit timestamp required to close a visit</li>
+    </ul>
+  </article>
+</section>
+{% endblock %}

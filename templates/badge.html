@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Visitor Badge | Visitor Management System{% endblock %}
+{% block heading %}Visitor Badge{% endblock %}
+{% block content %}
+<section class="badge-screen">
+  <article class="visitor-badge">
+    <div class="badge-top">
+      <div class="mobilis-logo">mobilis</div>
+      <span>{{ visitor.badge_number or ("MOB-%03d" % visitor.visitor_id) }}</span>
+    </div>
+    <div class="badge-name">
+      <strong>{{ visitor.first_name }} {{ visitor.last_name }}</strong>
+      <span>{{ visitor.access_level }} access</span>
+    </div>
+    <div class="badge-meta">
+      <div><span>Department</span><strong>{{ visitor.department }}</strong></div>
+      <div><span>Host</span><strong>{{ visitor.host_name or "-" }}</strong></div>
+      <div><span>Entry</span><strong>{{ visitor.entry_time.replace("T", " ") }}</strong></div>
+      <div><span>ID</span><strong>{{ visitor.id_card_number }}</strong></div>
+    </div>
+    <div class="badge-code">
+      <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+    </div>
+  </article>
+  <aside class="panel badge-notes">
+    <span class="eyebrow">Reception action</span>
+    <h2>Badge ready</h2>
+    <p>This screen gives reception staff a quick printable badge view with the visitor identity, host, department, access level, and entry timestamp.</p>
+    <a class="button primary" href="{{ url_for('records') }}">Back to Records</a>
+  </aside>
+</section>
+{% endblock %}

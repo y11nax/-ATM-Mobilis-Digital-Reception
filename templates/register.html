@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Register Visitor | Visitor Management System{% endblock %}
+{% block heading %}Register Visitor{% endblock %}
+{% block content %}
+<section class="panel narrow">
+  <form method="post" class="form-grid">
+    <label>First name
+      <input name="first_name" value="{{ form.first_name or '' }}" required>
+    </label>
+    <label>Last name
+      <input name="last_name" value="{{ form.last_name or '' }}" required>
+    </label>
+    <label>Phone number
+      <input name="phone_number" value="{{ form.phone_number or '' }}" placeholder="+213 ...">
+    </label>
+    <label>ID card number
+      <input name="id_card_number" value="{{ form.id_card_number or '' }}" required>
+    </label>
+    <label>Host name
+      <input name="host_name" value="{{ form.host_name or '' }}" placeholder="Employee receiving the visitor" required>
+    </label>
+    <label>Badge number
+      <input name="badge_number" value="{{ form.badge_number or '' }}" placeholder="MOB-005">
+    </label>
+    <label>Department
+      <select name="department" required>
+        {% for department in ["IT Systems", "Human Resources", "Finance", "General Affairs", "Security", "Commercial"] %}
+          <option value="{{ department }}" {{ 'selected' if form.department == department else '' }}>{{ department }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Access level
+      <select name="access_level">
+        {% for level in ["Standard", "Technical", "Logistics", "Restricted", "Meeting Room"] %}
+          <option value="{{ level }}" {{ 'selected' if form.access_level == level else '' }}>{{ level }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Visit purpose
+      <input name="visit_purpose" value="{{ form.visit_purpose or '' }}" required>
+    </label>
+    <label class="check">
+      <input type="checkbox" name="is_student" {{ 'checked' if form.is_student else '' }}>
+      Student visitor
+    </label>
+    <label>University
+      <input name="university" value="{{ form.university or '' }}" placeholder="If applicable">
+    </label>
+    <div class="actions">
+      <a class="button ghost" href="{{ url_for('dashboard') }}">Cancel</a>
+      <button class="button primary" type="submit">Save Visitor</button>
+    </div>
+  </form>
+</section>
+{% endblock %}
